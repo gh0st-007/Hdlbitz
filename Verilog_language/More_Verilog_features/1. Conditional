@@ -1,0 +1,11 @@
+module top_module (
+    input [7:0] a, b, c, d,
+    output [7:0] min);//
+
+    
+    wire [7:0]n1,n2;
+    assign n1 = a>b?b:a;
+    assign n2 = n1>c?c:n1;
+    assign min = n2>d?d:n2;
+
+endmodule
