@@ -1,0 +1,20 @@
+module top_module ( 
+    input clk, 
+    input [7:0] d, 
+    input [1:0] sel, 
+    output [7:0] q 
+);
+    wire [7:0]n1,n2,n3;
+    my_dff8 i1(.clk(clk),.d(d),.q(n1));
+    my_dff8 i2(.clk(clk),.d(n1),.q(n2));
+    my_dff8 i3(.clk(clk),.d(n2),.q(n3));
+    always @(*) begin
+        case(sel)
+            2'b00: q=d;
+            2'b01: q = n1;
+            2'b10: q = n2;
+            2'b11: q=n3;
+        endcase
+    end
+
+endmodule
