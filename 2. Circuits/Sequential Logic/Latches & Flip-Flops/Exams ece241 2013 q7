@@ -1,0 +1,12 @@
+module top_module (
+    input clk,
+    input j,
+    input k,
+    output Q);
+    
+    d_ff f1(j&~Q | ~k&Q,clk,Q);
+endmodule
+
+module d_ff(input d, clk, output reg q);
+    always @(posedge clk) q<=d;
+endmodule
