@@ -1,0 +1,10 @@
+module top_module (
+    input clk,
+    input w, R, E, L,
+    output Q
+);
+	wire n1,n2;
+    assign n1 = E?w:Q;
+    assign n2 = L?R:n1;
+    always @(posedge clk) Q<=n2;
+endmodule
