@@ -1,0 +1,19 @@
+module top_module (
+    input clk,
+    input x,
+    output z
+); 
+    reg n1=0,n2=0,n3=0;
+    
+    d_ff f1(x^n1,clk, n1);
+    d_ff f2(x&~n2,clk, n2);
+    d_ff f3(x|~n3,clk, n3);
+    assign z = ~(n1|n2|n3);
+    
+endmodule
+module d_ff( input in, clk, output Q);
+    always @(posedge clk) begin
+       Q<=in;
+    end
+        
+endmodule
