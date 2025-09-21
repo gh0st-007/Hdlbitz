@@ -13,4 +13,15 @@ module top_module (
         end
         delayed<=in;            
     end
+
+
+//always @(posedge clk) begin
+//      delayed<=in;
+//      if(reset) out<=32'b0;
+//      else begin
+//          for(int i=0;i<32;i++) begin
+//              if(~out[i]) out[i]<= ~in[i]&delayed[i]; 
+//          end
+//      end
+// end
 endmodule
