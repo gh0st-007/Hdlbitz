@@ -1,0 +1,28 @@
+module top_module (
+    input clk,
+    input reset,   
+    input x,
+    output z
+);
+    parameter a =3'b000, b = 3'b001, c =3'b010, d =3'b011, e=3'b100;
+    
+    reg [2:0] state, next;
+    
+    always @(posedge clk) begin
+        if(reset) state<=a;
+        else state<=next;
+    end
+    
+    always @(*) begin
+        case(state)
+            a: next = x? b:a;
+            b: next = x? e:b;
+            c: next = x? b:c;
+            d: next = x? c:b;
+            e: next = x? e:d;
+            default: next = a;
+        endcase
+    end
+
+    assign z = (state==d)|state==e;
+endmodule
