@@ -1,0 +1,36 @@
+module top_module (
+    input clk,
+    input reset,
+    input [3:1] s,
+    output fr3,
+    output fr2,
+    output fr1,
+    output dfr
+); 
+	parameter A=0,B=1,C=2,D=3,E=4,F=5;
+    reg [2:0] state,next;
+    
+    always @(*) begin
+        case(state)
+            A : next = s[1] ? B : A;
+            B : next = s[2] ? D : (s[1] ? B : A);
+            C : next = s[2] ? D : (s[1] ? C : A);
+            D : next = s[3] ? F : (s[2] ? D : C);
+            E : next = s[3] ? F : (s[2] ? E : C);
+            F : next = s[3] ? F : E;
+            default : next = A;
+        endcase
+    end
+    
+    always @(posedge clk) begin
+        if(reset) state <= A;
+        else state <= next;
+    end
+    
+    always @(*) begin
+        fr3 = (state == A) ;
+        fr2 = fr3 | (state == B) |  (state == C);
+        fr1 = (state != F) ;
+        dfr = (state == A) | (state == C) | (state == E);
+    end
+endmodule
