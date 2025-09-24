@@ -1,0 +1,38 @@
+module top_module(
+    input clk,
+    input reset,    
+    input in,
+    output disc,
+    output flag,
+    output err);
+	
+    
+    parameter none=0, one=1,two=2,three=3,four=4,five=5, six=6, error=7,discard=8,flagg=9;
+    
+    reg [3:0] state,next;
+    
+    always @(posedge clk) begin
+        if(reset) state<=none;
+        else state<=next;
+    end
+    
+    always @(*) begin
+        case(state)
+            none: next = in?one:none;
+            one: next = in?two:none;
+            two: next = in?three:none;
+            three: next = in?four:none;
+            four: next = in?five:none;
+            five: next = in?six:discard;
+            six: next = in?error:flagg;
+            flagg: next = in?one:none;
+            error: next = in?error:none;
+            discard: next = in?one:none;
+        endcase
+    end
+    
+    assign disc = state==discard;
+    assign flag = state==flagg;
+    assign err = state==error;
+   
+endmodule
