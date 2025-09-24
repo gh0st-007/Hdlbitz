@@ -1,0 +1,30 @@
+module top_module (
+    input clk,
+    input reset,   // Synchronous active-high reset
+    input w,
+    output z
+);
+ parameter a=3'd0,b=3'd1,c=3'd2,d=3'd3,e=3'd4,f=3'd5;
+    reg [2:0] state,next;
+    always @(posedge clk) begin
+        if(reset)
+            state<=a;
+        else
+            state<=next;
+    end
+    
+    always @(*) begin
+        case(state)
+            a: next = w ? b:a;
+            b: next = w ? c:d;
+            c: next = w ? e:d;
+            d: next = w ? f:a;
+            e: next = w ? e:d;
+            f: next = w ? c:d;
+            default: next = a;
+        endcase
+    end
+    
+    assign z = (state==e)|(state==f);
+            
+endmodule
