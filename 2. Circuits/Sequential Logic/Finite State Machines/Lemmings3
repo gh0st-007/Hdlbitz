@@ -1,0 +1,39 @@
+module top_module(
+    input clk,
+    input areset,    // Freshly brainwashed Lemmings walk left.
+    input bump_left,
+    input bump_right,
+    input ground,
+    input dig,
+    output walk_left,
+    output walk_right,
+    output aaah,
+    output digging ); 
+	
+    parameter LEFT_WALK=0,RIGHT_WALK=1,LEFT_FALL=2,RIGHT_FALL=3,DIG_LEFT=4,DIG_RIGHT=5;
+    
+    reg [2:0] state,next;
+    
+    always @(*) begin
+        case(state)
+            LEFT_WALK : next = ground ? (dig ? DIG_LEFT : (bump_left ? RIGHT_WALK : LEFT_WALK)) : LEFT_FALL;
+            RIGHT_WALK : next = ground ? (dig ? DIG_RIGHT : (bump_right ? LEFT_WALK : RIGHT_WALK)) : RIGHT_FALL;
+            LEFT_FALL : next = ground ? LEFT_WALK : LEFT_FALL;
+            RIGHT_FALL : next = ground ? RIGHT_WALK : RIGHT_FALL;
+            DIG_LEFT : next = ground ?  DIG_LEFT  : LEFT_FALL ;
+            DIG_RIGHT : next = ground ?  DIG_RIGHT : RIGHT_FALL ;
+            default: next = LEFT_WALK;
+        endcase
+    end
+    
+    always @(posedge clk, posedge areset) begin
+        if(areset) state<=LEFT_WALK;
+        else state<=next;
+    end
+    
+    assign aaah = (state == LEFT_FALL) | (state == RIGHT_FALL);
+    assign walk_left = (state == LEFT_WALK);
+    assign walk_right = (state == RIGHT_WALK);
+    assign digging = (state == DIG_LEFT) | (state == DIG_RIGHT);
+    
+endmodule
