@@ -1,0 +1,11 @@
+module top_module (
+    input [3:1] y,
+    input w,
+    output Y2);
+
+    parameter a =3'b000,b=3'b001,c=3'b010,d=3'b011,e=3'b100,f=3'b101;
+    wire n1,n2;
+    assign n1 = (~w) &((y==b)|(y==f));
+    assign n2 = (w) &((y==b)|(y==c)|(y==e)|(y==f));
+    assign Y2 = n1|n2;
+endmodule
