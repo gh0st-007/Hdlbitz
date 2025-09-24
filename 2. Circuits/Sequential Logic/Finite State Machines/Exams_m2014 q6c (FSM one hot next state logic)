@@ -1,0 +1,11 @@
+module top_module (
+    input [6:1] y,
+    input w,
+    output Y2,
+    output Y4);
+    parameter a = 6'd1,b=6'd2,c=6'd4,d=6'd8,e=6'd16,f=6'd32;
+    always @(*) begin
+        Y2 =  ~w & (y[1]);
+        Y4 = (w&(y[2]|y[3]|y[5]|y[6]));
+    end
+endmodule
