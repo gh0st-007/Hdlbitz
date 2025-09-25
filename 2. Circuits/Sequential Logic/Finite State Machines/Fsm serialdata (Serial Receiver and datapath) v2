@@ -1,0 +1,41 @@
+module top_module(
+    input clk,
+    input in,
+    input reset,    // Synchronous reset
+    output reg [7:0] out_byte,
+    output done
+); //
+
+    parameter start = 0, receiving = 1, correct = 2, bad = 3, what =4;
+    reg [2:0] state , next;
+    reg [3:0] count;
+    always @(*) begin 
+        case(state)
+            start : next = in ? start : receiving;
+            receiving : next = (count == 4'd7) ? what:receiving;
+            what: next = in ? correct : bad;
+            correct: next = in ? start : receiving;
+            bad : next = in ? start : bad;
+            default: next = start;
+        endcase
+    end
+	
+    always @(posedge clk) begin
+        if(reset) begin 
+            state<=start; 
+            count <=4'd0;
+        end
+        else begin
+            if(state==receiving) begin 
+                out_byte<={in, out_byte[7:1]};
+                count<=count+4'd1;
+            end
+            else  begin count <=4'd0;
+            end
+            state<=next;
+        end
+    end
+    
+    assign done = (state == correct) ;
+    assign out_byte = out_byte;
+endmodule
